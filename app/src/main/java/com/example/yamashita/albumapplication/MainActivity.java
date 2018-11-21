@@ -13,15 +13,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_PERMISSION = 1000;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    final private static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +49,22 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Bitmap> load() {
         ArrayList<Bitmap> list = new ArrayList<>();
         ContentResolver cr = getContentResolver();
-        Uri uri = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Cursor c = cr.query(uri, null, null, null, null);
         c.moveToFirst();
+
         for (int i=0; i<c.getCount(); i++) {
             long id = c.getLong(c.getColumnIndexOrThrow("_id"));
-            Bitmap bmp = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
-            list.add(bmp);
+            String filepath = c.getString(c.getColumnIndexOrThrow("_data"));
+            Bitmap bmp = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MINI_KIND, null);
+            if (bmp == null) {
+                Log.d(TAG, "Cursor_ID: " + String.valueOf(id) + ", bmp:null" + ", filepath : " + filepath);
+            } else {
+                Log.d(TAG, "Cursor_ID: " + String.valueOf(id) + ", bmp:not null" + ", filepath : " + filepath);
+            }
+            if(bmp != null) {
+                list.add(bmp);
+            }
             c.moveToNext();
         }
         return list;
