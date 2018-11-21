@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         BitmapAdapter adapter = new BitmapAdapter(getApplicationContext(), R.layout.list_item, list);
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
+        gridView.setNumColumns(3);
         gridView.setAdapter(adapter);
     }
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         c.moveToFirst();
         for (int i=0; i<c.getCount(); i++) {
             long id = c.getLong(c.getColumnIndexOrThrow("_id"));
-            Bitmap bmp = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MINI_KIND, null);
+            Bitmap bmp = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
             list.add(bmp);
             c.moveToNext();
         }
