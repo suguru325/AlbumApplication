@@ -1,36 +1,63 @@
 package com.example.yamashita.albumapplication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
 import java.util.List;
 
 
-public class BitmapAdapter extends ArrayAdapter<Bitmap> {
-    private int resourceId;
-    final private static String TAG = "BitmapAdapter";
+public class BitmapAdapter extends BaseAdapter {
 
+    private List<Long> mIdList;
+    private LayoutInflater mInflater;
+    private Context mContext;
 
-    public BitmapAdapter(Context context, int resource, List<Bitmap> objects) {
-        super(context, resource, objects);
-        resourceId = resource;
+    static class ViewHolder {
+        CustomImageView civ_image;
+    }
+
+    public BitmapAdapter(Context context, List<Long> uriList) {
+        mIdList = uriList;
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mContext = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        ViewHolder holder;
+
         if(convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(resourceId, null);
+            convertView = mInflater.inflate(R.layout.list_item, null);
+
+            holder = new ViewHolder();
+            holder.civ_image = (CustomImageView) convertView.findViewById(R.id.customImageView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-        CustomImageView view = (CustomImageView) convertView;
-        view.setImageBitmap(getItem(position));
-        Log.d(TAG, String.valueOf(position));
-        return view;
+
+        new ImageTask(mContext, holder.civ_image, mIdList.get(position)).execute();
+        holder.civ_image.setTag(mIdList.get(position));
+        return convertView;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public int getCount() {
+        return mIdList.size();
     }
 }
 
