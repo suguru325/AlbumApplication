@@ -30,19 +30,25 @@ public class BitmapAdapter extends BaseAdapter {
 
         ViewHolder holder;
 
-        if(convertView == null) {
-            convertView = mInflater.inflate(R.layout.list_item, null);
-
-            holder = new ViewHolder();
-            holder.civ_image = (CustomImageView) convertView.findViewById(R.id.customImageView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        new ImageTask(mContext, holder.civ_image, mIdList.get(position)).execute();
-        holder.civ_image.setTag(mIdList.get(position));
+        convertView = mInflater.inflate(R.layout.list_item, null);
+        CustomImageView customImageView = (CustomImageView) convertView.findViewById(R.id.customImageView);
+        customImageView.setTag(mIdList.get(position));
+        new ImageTask(mContext, customImageView, mIdList.get(position)).execute();
         return convertView;
+
+//        if(convertView == null) {
+//            convertView = mInflater.inflate(R.layout.list_item, null);
+//
+//            holder = new ViewHolder();
+//            holder.civ_image = (CustomImageView) convertView.findViewById(R.id.customImageView);
+//            convertView.setTag(holder);
+//        } else {
+//            holder = (ViewHolder) convertView.getTag();
+//        }
+//
+//        holder.civ_image.setTag(mIdList.get(position));
+//        new ImageTask(mContext, holder.civ_image, mIdList.get(position)).execute();
+//        return convertView;
     }
 
     @Override
