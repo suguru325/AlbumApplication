@@ -2,9 +2,7 @@ package com.example.yamashita.albumapplication;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 
